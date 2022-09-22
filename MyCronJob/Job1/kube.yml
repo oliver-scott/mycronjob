@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: job1
+spec:
+  schedule: "05 11 * * *" # run at 11:05 UTC every day
+  concurrencyPolicy: Forbid # prevent multiple instances of the job running at once
+  jobTemplate:
+    spec:
+      # activeDeadlineSeconds: 900 # maximum time the job can run for, before Kubernetes stops it
+      backoffLimit: 0 # set to 0 to prevent retries
+      # ttlSecondsAfterFinished: 100 # automatically clean up the Succeeded job pods after this time
+      template:
+        spec:
+          containers:
+          - name: job1
+            image: my-registry-host/mycronjob:latest
+            args: ["Job1"]
+            env:
+          restartPolicy: Never
